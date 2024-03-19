@@ -63,13 +63,14 @@ Philippines. Use the filter option to plot specific districts and
 divisions on the map.
 
 ```{r}
-distinct_names <- ph_admin %>% distinct(name_en)
+distinct_names <- BB_admin %>% distinct(name_en)
 print(distinct_names)
 ```
 
 ```{r}
 # Creating BD Boundary
-ph_boundary <- ph_admin %>%
+
+BB_boundary <- BB_admin %>%
   st_geometry %>%
   st_union %>%
   st_sf %>%
@@ -81,14 +82,14 @@ ph_boundary <- ph_admin %>%
 Visualize the hex data and boundaries to ensure accuracy.
 
 ```{r}
-names(ph_hex)
+names(BB_hex)
 ```
 
 ```{r}
  library(ggplot2)
-ggplot(ph_hex) + 
+ggplot(BB_hex) + 
   geom_sf(aes(fill = population), color = "gray66", linewidth = 0) + 
-  geom_sf(data = ph_boundary, fill = NA, color = "black")
+  geom_sf(data = BB_boundary, fill = NA, color = "black")
 ```
 
 #### **6. Calculate Aspect Ratio**:
@@ -138,7 +139,7 @@ rendering.
 size = 3500
 
 pop_raster <- st_rasterize(
-  ph_hex,
+  BB_hex,
   nx = floor(size * w_ratio) %>% as.numeric(),
   ny = floor(size * h_ratio) %>% as.numeric()
 )
@@ -197,7 +198,7 @@ Fine-tune the camera angle and render a high-quality image of the 3D
 map.
 
 ```{r}
-outfile <- glue::glue("Plots/Ph_final_2.png")
+outfile <- glue::glue("Plots/BB_final_2.png")
 
 {
   start_time <- Sys.time()
@@ -243,7 +244,7 @@ install.packages("extrafont")
 library(extrafont)
 font_import(pattern = "Philosopher")
 
-pop_raster <- image_read("Plots/Ph_final.png")
+pop_raster <- image_read("Plots/BB_final.png")
 
 text_color <- darken(color[1], .4)
 swatchplot(text_color)
